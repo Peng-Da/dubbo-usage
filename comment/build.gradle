@@ -1,0 +1,109 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'nu.studer.jooq' version '5.2.1'//gradle-jooq-plugin
+}
+
+group 'com.singerdream'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven {
+        url 'https://maven.aliyun.com/repository/public/'
+    }
+    mavenCentral()
+}
+
+//?在下面jooq中不能引用props？
+def props = new Properties()
+file("${projectDir}/src/main/resources/application-dev.yml").withInputStream {props.load(it)}
+
+jooq {
+//    version = '3.14.7'  // default (can be omitted)
+//    edition = nu.studer.gradle.jooq.JooqEdition.OSS  // default (can be omitted)
+
+    configurations {
+        main {  // name of the jOOQ configuration
+//            generateSchemaSourceOnCompilation = true  // default (can be omitted)
+
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = "jdbc:postgresql://localhost:5432/comment"
+                    user = "www"
+                    password = "www"
+                    /*properties {
+                        property {
+                            key = 'ssl'
+                            value = 'true'
+                        }
+                    }*/
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                        forcedTypes {
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'JSONB?'
+                            }
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'INET'
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        fluentSetters = true
+                        daos = true
+                        springAnnotations = true
+                    }
+                    target {
+                        packageName = 'com.singerdream.comment'
+                        directory = 'src/main/java/jooq'  // default (can be omitted)
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+
+
+
+dependencies {
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter:2.7.8'
+    implementation 'org.apache.dubbo:dubbo:2.7.8'
+    /**
+     *
+     */
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'com.alibaba.nacos:nacos-client:1.4.1'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.jooq:jooq-codegen'
+    runtimeOnly 'org.postgresql:postgresql'
+    jooqGenerator 'org.postgresql:postgresql:42.2.19'
+    implementation 'com.alibaba.spring:spring-context-support:1.0.10'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    /**
+     *
+     */
+    implementation 'com.singerdream:text-detection-api:0.0.1-SNAPSHOT'
+    compile project(':comment-api')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+
+}

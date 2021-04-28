@@ -1,0 +1,31 @@
+
+## application
+#dubbo.application.name = text-detection-service
+
+## Nacos registry address
+#dubbo.registry.address = nacos://localhost:8848
+
+## Dubbo Protocol
+#dubbo.protocol.name = dubbo
+#dubbo.protocol.port = -1
+
+dubbo:
+  application.name : text-detection-service
+  ## Nacos registry address
+  registry.address : nacos://localhost:8848
+  protocol :
+    name : dubbo
+    port : -1
+
+# Provider @Service version ?
+#text-detection.service.version=1.0.0
+#text-detection.service.name = textDetectionService
+
+spring:
+  profiles:
+    active: dev
+
+
+
+#tomcat port
+#server.port=8092

@@ -1,0 +1,9 @@
+#datasource
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/text_detection
+    username: www
+    password: www
+    hikari:
+      maximum-pool-size: 100
+      leak-detection-threshold: 1000

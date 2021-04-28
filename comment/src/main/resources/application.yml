@@ -1,0 +1,36 @@
+
+## application
+#dubbo.application.name = comment-service
+
+## Nacos registry address
+#dubbo.registry.address = nacos://localhost:8848
+##如果要使用自己创建的命名空间可以使用下面2种方式
+#dubbo.registry.address = nacos://127.0.0.1:8848?namespace=5cbb70a5-xxx-xxx-xxx-d43479ae0932
+#dubbo.registry.parameters.namespace=5cbb70a5-xxx-xxx-xxx-d43479ae0932
+
+## Dubbo Protocol
+#dubbo.protocol.name = dubbo
+#dubbo.protocol.port = -1
+
+
+dubbo:
+  application.name : comment-service
+## Nacos registry address
+  registry.address : nacos://localhost:8848
+  protocol :
+    name : dubbo
+    port : -1
+
+# Provider @Service version
+#comment.service.version=1.0.0
+#comment.service.name = commentService
+
+# tomcat port
+#server.port=8091
+server:
+  port: 8091
+
+
+spring:
+  profiles:
+    active: dev
